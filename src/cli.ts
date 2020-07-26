@@ -28,14 +28,14 @@ const exec = async (
 export async function cli(args: string[]) {
   const options = ArgParser.parse(args);
   if (options.dev) {
-    // exec('npm run dev:backend', (type, chunk) => {
-    //   process[type].write(chunk);
-    // }).catch(error => {
-    //   throw error;
-    // });
-    exec('npm run dev:ui', (type, chunk) => {
+    exec('bcms-backend', (type, chunk) => {
       process[type].write(chunk);
-    }).catch(error => {
+    }).catch((error) => {
+      throw error;
+    });
+    exec('bcms-ui serve', (type, chunk) => {
+      process[type].write(chunk);
+    }).catch((error) => {
       throw error;
     });
   }

@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "dev": "bcms-ui serve",
+    "dev": "env-cmd ts-node src/bin/bcms.ts --dev",
     "dev:backend": "env-cmd bcms-backend",
-    "dev:ui": "bcms-ui --dev",
+    "dev:ui": "bcms-ui --dev src/main.js",
     "bundle": "node tools.js --bundle",
     "link": "node tools.js --link",
     "unlink": "node tools.js --unlink",
