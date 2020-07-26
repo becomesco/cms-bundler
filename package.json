@@ -1,0 +1,54 @@
+{
+  "name": "@becomes/cms",
+  "version": "2.0.0",
+  "description": "Backend for the BCMS",
+  "author": "becomes.co",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "bcms-ui serve",
+    "dev:backend": "env-cmd bcms-backend",
+    "dev:ui": "bcms-ui --dev",
+    "bundle": "node tools.js --bundle",
+    "link": "node tools.js --link",
+    "unlink": "node tools.js --unlink",
+    "publish": "node tools.js --publish",
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "esm": "^3.2.25",
+    "fs-extra": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.1.0",
+    "@types/node": "^12.12.50",
+    "env-cmd": "^10.1.0",
+    "listr": "^0.14.3",
+    "ts-node": "^8.10.2",
+    "tsconfig-paths": "^3.9.0",
+    "tslint": "^5.20.1",
+    "typedoc": "^0.17.8",
+    "typedoc-neo-theme": "^1.0.9",
+    "typescript": "^3.9.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/becomesco/cms-bundler.git"
+  },
+  "bin": {
+    "bcms": "bin/bcms.js"
+  },
+  "keywords": [
+    "bcms"
+  ],
+  "bugs": {
+    "url": "https://github.com/becomesco/cms/issues"
+  },
+  "homepage": "https://github.com/becomesco/cms#readme",
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts"
+  }
+}
