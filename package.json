@@ -7,8 +7,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd ts-node src/bin/bcms.ts --dev",
-    "dev:backend": "env-cmd bcms-backend",
-    "dev:ui": "bcms-ui --dev src/main.js",
+    "dev:backend": "env-cmd ts-node src/bin/bcms.ts --dev --backend",
+    "dev:ui": "env-cmd ts-node src/bin/bcms.ts --dev --ui",
     "bundle": "node tools.js --bundle",
     "link": "node tools.js --link",
     "unlink": "node tools.js --unlink",
