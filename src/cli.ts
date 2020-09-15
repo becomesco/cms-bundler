@@ -4,10 +4,10 @@ import * as fs from 'fs';
 import * as util from 'util';
 import { ArgParser } from './util';
 
-const exec = async (
+async function exec(
   cmd: string,
   output: (type: 'stderr' | 'stdout', chunk: string) => void,
-) => {
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const proc = childProcess.exec(cmd);
     if (output) {
@@ -26,28 +26,57 @@ const exec = async (
       }
     });
   });
-};
+}
+async function spawn(
+  cmd: string,
+  args?: string[],
+  options?: childProcess.SpawnOptions,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const proc = childProcess.spawn(cmd, args, options);
+    // proc.stdout.pipe(process.stdout);
+    // proc.stderr.pipe(process.stderr);
+    proc.on('close', (code) => {
+      if (code !== 0) {
+        reject(code);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
 
 export async function cli(args: string[]) {
   const options = ArgParser.parse(args);
   if (options.dev) {
     if (options.backend) {
-      devBackend();
+      devBackend().catch((error) => {
+        throw error;
+      });
     } else if (options.ui) {
-      devUi();
+      devUi().catch((error) => {
+        throw error;
+      });
     } else {
-      devBackend();
-      devUi();
+      devBackend().catch((error) => {
+        throw error;
+      });
+      devUi().catch((error) => {
+        throw error;
+      });
     }
   }
 }
 
 async function devBackend() {
-  exec('bcms-backend', (type, chunk) => {
-    process[type].write(chunk);
-  }).catch((error) => {
+  spawn('bcms-backend', undefined, { stdio: 'inherit' }).catch((error) => {
     throw error;
   });
+  // exec('bcms-backend', (type, chunk) => {
+  //   process[type].write(chunk);
+  // }).catch((error) => {
+  //   throw error;
+  // });
 }
 
 async function devUi() {
@@ -129,9 +158,9 @@ async function devUi() {
   process.chdir(
     path.join(__dirname, '..', 'node_modules', '@becomes', 'cms-ui'),
   );
-  exec('bcms-ui serve src/main.temp.js', (type, chunk) => {
-    process[type].write(chunk);
-  }).catch((error) => {
-    throw error;
-  });
+  spawn('bcms-ui', ['serve', 'src/main.temp.js'], { stdio: 'inherit' }).catch(
+    (error) => {
+      throw error;
+    },
+  );
 }
