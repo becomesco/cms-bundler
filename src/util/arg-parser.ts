@@ -8,6 +8,7 @@ export class ArgParser {
         '--dev': Boolean,
         '--ui': Boolean,
         '--backend': Boolean,
+        '--plugin': Boolean,
       },
       {
         argv: rawArgs.slice(2),
@@ -17,6 +18,7 @@ export class ArgParser {
       dev: args['--dev'] || false,
       ui: args['--ui'] || false,
       backend: args['--backend'] || false,
+      plugin: args['--plugin'] || false,
     };
     return options;
   }

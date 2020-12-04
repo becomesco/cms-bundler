@@ -12,7 +12,7 @@
     "incremental": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "public"],
+  "exclude": ["node_modules", "dist", "public", "plugins"],
   "typedocOptions": {
     "name": "BCMS | Bundler",
     "theme": "./node_modules/typedoc-neo-theme/bin/default",

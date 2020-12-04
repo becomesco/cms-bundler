@@ -1,35 +1,39 @@
 {
-  "name": "@becomes/cms",
-  "version": "2.0.0",
+  "name": "@becomes/cms-bundler",
+  "version": "2.0.4",
   "description": "Backend for the BCMS",
   "author": "becomes.co",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd ts-node src/bin/bcms.ts --dev",
-    "dev:backend": "env-cmd ts-node src/bin/bcms.ts --dev --backend",
-    "dev:ui": "env-cmd ts-node src/bin/bcms.ts --dev --ui",
+    "dev": "ts-node src/bin/bcms.ts --dev",
+    "dev:backend": "ts-node src/bin/bcms.ts --dev --backend",
+    "dev:ui": "ts-node src/bin/bcms.ts --dev --ui",
     "bundle": "node tools.js --bundle",
     "link": "node tools.js --link",
     "unlink": "node tools.js --unlink",
     "publish": "node tools.js --publish",
-    "build": "tsc -p ."
+    "build:ts": "npm run lint && tsc -p .",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
-    "esm": "^3.2.25",
-    "fs-extra": "^8.1.0"
+    "arg": "^4.1.3",
+    "fs-extra": "^8.1.0",
+    "nodemon": "^2.0.6"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
-    "@types/node": "^12.12.50",
+    "@types/node": "^12.19.8",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
     "env-cmd": "^10.1.0",
+    "eslint": "^7.14.0",
     "listr": "^0.14.3",
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
-    "tslint": "^5.20.1",
     "typedoc": "^0.17.8",
-    "typedoc-neo-theme": "^1.0.9",
-    "typescript": "^3.9.6"
+    "typedoc-neo-theme": "^1.0.10",
+    "typescript": "^4.0.5"
   },
   "repository": {
     "type": "git",

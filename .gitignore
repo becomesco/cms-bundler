@@ -4,6 +4,7 @@
 /doc
 /ui
 /db
+/bcms.config.js
 
 # Logs
 /log

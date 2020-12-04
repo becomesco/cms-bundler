@@ -1,4 +1,3 @@
-const Listr = require('listr');
 const childProcess = require('child_process');
 const fse = require('fs-extra');
 const fs = require('fs');
@@ -25,7 +24,41 @@ const exec = async (cmd, output) => {
     });
   });
 };
-
+async function spawn(cmd, args, options) {
+  return new Promise((resolve, reject) => {
+    const proc = childProcess.spawn(cmd, args, options);
+    proc.on('close', (code) => {
+      if (code !== 0) {
+        reject(code);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+/**
+ * @param {Array<{
+ *  title: string;
+ *  task: () => Promise<void>;
+ * }>} tasks
+ */
+const Tasks = (tasks) => {
+  return {
+    run: async () => {
+      for (let i = 0; i < tasks.length; i = i + 1) {
+        const t = tasks[i];
+        console.log(`${i + 1}. ${t.title}`);
+        try {
+          await t.task();
+          console.log(`✓`);
+        } catch (error) {
+          console.log(`⨉`);
+          throw error;
+        }
+      }
+    },
+  };
+};
 const parseArgs = (rawArgs) => {
   const args = {};
   let i = 2;
@@ -50,7 +83,7 @@ const parseArgs = (rawArgs) => {
   };
 };
 const bundle = async () => {
-  const tasks = new Listr([
+  const tasks = Tasks([
     {
       title: 'Remove dist directory.',
       task: async () => {
@@ -60,7 +93,7 @@ const bundle = async () => {
     {
       title: 'Compile Typescript.',
       task: async () => {
-        await exec('npm run build');
+        await exec('npm run build:ts');
       },
     },
     {
@@ -101,12 +134,19 @@ const unlink = async () => {
   await exec('cd dist && sudo npm unlink');
 };
 const publish = async () => {
-  if (await fse.exists(path.join(__dirname, 'dist', 'node_modules'))) {
+  if (
+    await util.promisify(fse.exists)(
+      path.join(__dirname, 'dist', 'node_modules'),
+    )
+  ) {
     throw new Error(
       `Please remove "${path.join(__dirname, 'dist', 'node_modules')}"`,
     );
   }
-  await exec('cd dist && npm publish --access=public');
+  await spawn('npm', ['publish', '--access=public'], {
+    cwd: path.join(process.cwd(), 'dist'),
+    stdio: 'inherit',
+  });
 };
 
 async function main() {
