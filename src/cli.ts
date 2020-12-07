@@ -70,6 +70,12 @@ export async function cli(args: string[]) {
     if (options.backend) {
       await prepareBackend(config);
       await spawn('bcms-backend', undefined, { stdio: 'inherit' });
+    } else if (options.ui) {
+      await prepareUI(config);
+      await spawn('bcms-ui', ['--build'], {
+        cwd: path.join(process.cwd(), 'node_modules', '@becomes', 'cms-ui'),
+        stdio: 'inherit',
+      });
     } else {
       await prepareBackend(config);
       await prepareUI(config);
