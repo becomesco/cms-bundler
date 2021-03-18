@@ -1,7 +1,5 @@
 import * as childProcess from 'child_process';
 import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
 import { ArgParser, General } from './util';
 import { Config, ConfigSchema } from './interfaces';
 
@@ -99,23 +97,28 @@ function setEnv(config: Config) {
     ? '' + config.security.jwt.expireIn
     : '1200000';
   process.env.API_PORT = '' + config.port;
-  if (config.database.fs) {
+  if (process.env.BCMS_LOCAL) {
     process.env.DB_USE_FS = 'true';
-    process.env.DB_PRFX = config.database.fs;
-  } else if (config.database.mongodb) {
-    if (config.database.mongodb.atlas) {
-      process.env.DB_NAME = config.database.mongodb.atlas.name;
-      process.env.DB_USER = config.database.mongodb.atlas.user;
-      process.env.DB_PASS = config.database.mongodb.atlas.password;
-      process.env.DB_PRFX = config.database.mongodb.atlas.prefix;
-      process.env.DB_CLUSTER = config.database.mongodb.atlas.cluster;
-    } else if (config.database.mongodb.selfHosted) {
-      process.env.DB_HOST = config.database.mongodb.selfHosted.host;
-      process.env.DB_PORT = '' + config.database.mongodb.selfHosted.port;
-      process.env.DB_NAME = config.database.mongodb.selfHosted.name;
-      process.env.DB_USER = config.database.mongodb.selfHosted.user;
-      process.env.DB_PASS = config.database.mongodb.selfHosted.password;
-      process.env.DB_PRFX = config.database.mongodb.selfHosted.prefix;
+    process.env.DB_PRFX = 'bcms';
+  } else {
+    if (config.database.fs) {
+      process.env.DB_USE_FS = 'true';
+      process.env.DB_PRFX = config.database.fs;
+    } else if (config.database.mongodb) {
+      if (config.database.mongodb.atlas) {
+        process.env.DB_NAME = config.database.mongodb.atlas.name;
+        process.env.DB_USER = config.database.mongodb.atlas.user;
+        process.env.DB_PASS = config.database.mongodb.atlas.password;
+        process.env.DB_PRFX = config.database.mongodb.atlas.prefix;
+        process.env.DB_CLUSTER = config.database.mongodb.atlas.cluster;
+      } else if (config.database.mongodb.selfHosted) {
+        process.env.DB_HOST = config.database.mongodb.selfHosted.host;
+        process.env.DB_PORT = '' + config.database.mongodb.selfHosted.port;
+        process.env.DB_NAME = config.database.mongodb.selfHosted.name;
+        process.env.DB_USER = config.database.mongodb.selfHosted.user;
+        process.env.DB_PASS = config.database.mongodb.selfHosted.password;
+        process.env.DB_PRFX = config.database.mongodb.selfHosted.prefix;
+      }
     }
   }
   if (config.plugins.length > 0) {
