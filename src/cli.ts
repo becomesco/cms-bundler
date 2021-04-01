@@ -507,7 +507,7 @@ async function prepareUI(config: Config, inPlugin?: boolean) {
     mainFile.substring(0, startPluginsIndex) +
     `${startPluginsFlag}\n` +
     importPaths.join('\n') +
-    `\nconst plugins = [${pluginElements.join('\n')}];\n` +
+    `\nconst plugins = [${pluginElements.join(',\n')}];\n` +
     `${endPluginsFlag}` +
     mainFile.substring(endPluginsIndex, startRouterPluginsIndex) +
     `${startRouterPluginsFlag}\n` +
