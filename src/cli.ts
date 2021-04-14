@@ -29,7 +29,7 @@ export async function cli(args: string[]) {
   );
   General.object.compareWithSchema(config, ConfigSchema, 'config');
 
-  setEnv(config);
+  await setEnv(config);
 
   if (options.dev) {
     process.env.DEV = 'true';
@@ -88,7 +88,31 @@ export async function cli(args: string[]) {
   }
 }
 
-function setEnv(config: Config) {
+async function setEnv(config: Config) {
+  if (
+    await util.promisify(fs.exists)(
+      path.join(
+        process.cwd(),
+        'node_modules',
+        '@becomes',
+        'cms-ui',
+        'hash.txt',
+      ),
+    )
+  ) {
+    const hash = (
+      await util.promisify(fs.readFile)(
+        path.join(
+          process.cwd(),
+          'node_modules',
+          '@becomes',
+          'cms-ui',
+          'hash.txt',
+        ),
+      )
+    ).toString();
+    process.env.BCMS_UI_BUNDLE_HASH = hash;
+  }
   process.env.JWT_ISSUER = config.backend.security.jwt.issuer;
   process.env.JWT_SECRET = config.backend.security.jwt.secret;
   process.env.JWT_EXP_AFTER = config.backend.security.jwt.expireIn
